@@ -3,21 +3,38 @@
 #include<string>
 #include<iostream>
 
-struct ScaleData;
-std :: istream &read(std :: istream& is, ScaleData& item);
+class ScaleData{
+  friend std :: istream &read(std :: istream& is, ScaleData& item);
 
-struct ScaleData{
-  ScaleData() = default;
-  ScaleData(const std :: string& no): bookNo(no){}
-  ScaleData(const std :: string& no, const unsigned amout, const double price): bookNo(no), unitSold(amout), revenue(amout * price){}
-  ScaleData(std :: istream& in) {
-    read(in,*this);
-  }
+  friend ScaleData add(const ScaleData& s1, const ScaleData& s2);
+
+  friend std :: ostream &print(std :: ostream& os, const ScaleData& item);
+
+  private:
   std :: string bookNo;
 
   unsigned unitSold = 0;
 
   double revenue = 0.0;
+
+  double avgPrice() const {
+    if(unitSold != 0) {
+      return revenue / unitSold;
+    } else {
+      return 0.0;
+    }
+  }
+
+  public:
+  ScaleData() = default;
+
+  ScaleData(const std :: string& no): bookNo(no){}
+
+  ScaleData(const std :: string& no, const unsigned amout, const double price): bookNo(no), unitSold(amout), revenue(amout * price){}
+
+  ScaleData(std :: istream& in) {
+    read(in,*this);
+  }
 
   std :: string isbn() const {
     return this->bookNo;
@@ -28,14 +45,6 @@ struct ScaleData{
     revenue += rhs.revenue;
     return *this;
   }
-
-  double avgPrice() const {
-    if(unitSold != 0) {
-      return revenue / unitSold;
-    } else {
-      return 0.0;
-    }
-  }
 };
 
 ScaleData add(const ScaleData& s1, const ScaleData& s2) {
@@ -45,7 +54,7 @@ ScaleData add(const ScaleData& s1, const ScaleData& s2) {
 }
 
 std :: ostream &print(std :: ostream& os, const ScaleData& item) {
-  os << item.isbn() << " " << item.unitSold << " " << item.revenue << " " << item.avgPrice();
+  os << item.isbn() << " " << item.unitSold << " " << item.revenue << " " << item.avgPrice() << std :: endl;;
   return os;
 }
 

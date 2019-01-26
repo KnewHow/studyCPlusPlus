@@ -9,18 +9,18 @@ using std :: endl;
 using std :: cerr;
 
 void scaleDataDemo() {
-  ScaleData total;
-  if(read(cin, total)) {
-    ScaleData tmp;
-    while(read(cin, tmp)) {
+  std :: istream& in = cin;
+  if(in) {
+    ScaleData total(in);
+    while(in) {
+      ScaleData tmp(in);
       if(tmp.isbn() == total.isbn()) {
         total.combine(tmp);
       } else {
-        cout << "book number is ->" << total.bookNo <<" units sold is ->"<< total.unitSold << " average price is ->" << total.revenue / total.unitSold << endl;
+        print(cout, total);
         total = tmp;
       }
     }
-    print(cout, total);
   } else {
     cerr << "No data ?" << endl;
   }
