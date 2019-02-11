@@ -4,6 +4,7 @@
 
 using std :: string;
 using std :: ifstream;
+using std :: ofstream;
 using std :: istream;
 using std :: cout;
 using std :: endl;
@@ -16,12 +17,14 @@ istream& read(istream &in, Scale &s) {
   return in;
 }
 
-void print(const Scale s) {
-  cout  << s.number << " " << s.count << " " << s.total << " " << (s.total / s.count) << endl;
+void print(const Scale s, string filename) {
+  ofstream fout;
+  fout.open(filename, ofstream::app);
+  fout  << s.number << " " << s.count << " " << s.total << " " << (s.total / s.count) << endl;
 }
 
 
-void process(string filename) {
+void process(string filename, string resultname) {
   ifstream fin(filename);
   if(fin) {
     Scale total;
@@ -31,11 +34,11 @@ void process(string filename) {
         if(total.isSame(tmp)) {
           total.combine(tmp);
         } else {
-          print(total);
+          print(total,resultname);
           total = tmp;
         }
       }
-      print(total);
+      print(total,resultname);
     }
   } else {
     cerr << "bind file input stream to ->" << filename << "failure" << endl;
@@ -44,6 +47,7 @@ void process(string filename) {
 
 int main(int argc, char **argv) {
   string filename(argv[1]);
-  process(filename);
+  string resultname(argv[2]);
+  process(filename, resultname);
   return 0;
 }
