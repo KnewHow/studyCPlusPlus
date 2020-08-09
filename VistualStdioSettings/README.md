@@ -1,4 +1,4 @@
-# Vistual Stdio 配置
+# Visual Stdio 配置
 
 ## 1 工程目录
 
